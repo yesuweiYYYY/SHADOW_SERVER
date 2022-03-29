@@ -146,12 +146,13 @@ def register():
 
 
 # 返回其他人坐标
-@app.route('/location', methods=['get'])
-def location():
+@app.route('/location_other/<string:username>', methods=['get', 'post'])
+def location(username):
     connection = pymysql.connect(host='rm-bp151716jpy7k5711zo.mysql.rds.aliyuncs.com', user='root',
                                  password='123456789yY', database='ryxs')
     cursor = connection.cursor(cursor=pymysql.cursors.DictCursor)
-    sql = "select * from location"
+
+    sql = u"select username,x,y from ((SELECT r.username,l.x ,l.y from relation r INNER JOIN  location l where r.id = l.id )as a) where username != '%s' " % username
     cursor.execute(sql)
     result = cursor.fetchall()
 
@@ -160,17 +161,14 @@ def location():
     return str(result)
 
 
-@app.route('/location/<string:username_1>', methods=['post'])
-def location_for(username_1):
+@app.route('/location_me/<string:username>', methods=['get','post'])
+def location_for(username):
     connection = pymysql.connect(host='rm-bp151716jpy7k5711zo.mysql.rds.aliyuncs.com', user='root',
                                  password='123456789yY', database='ryxs')
     cursor = connection.cursor(cursor=pymysql.cursors.DictCursor)
-    #
-    sql = u"select * from location where usrname = '11'"
-    #
+    sql = u"select username,x,y from ((SELECT r.username,l.x ,l.y from relation r INNER JOIN  location l where r.id = l.id )as a) where username= '%s' " % username
     cursor.execute(sql)
     result = cursor.fetchall()
-    print(result)
 
     cursor.close()
     connection.close()
@@ -187,5 +185,5 @@ def updatalocation():
 
 
 if __name__ == '__main__':
-    app.run()
+    app.run(host='0.0.0.0')
 
