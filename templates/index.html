@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+    <HR>
+    <table>
+        <form method="post">
+            {{ form.csrf_token }}
+            {{ form.username.label }}{{ form.username }}<br>
+            {{ form.password.label }}{{ form.password }}<br>
+            {{ form.sex.label }}{{ form.sex }}<br>
+            {{ form.age.label }}{{ form.age }}<br>
+            {{ form.phone.label }}{{ form.phone }}<br>
+            {{ form.description.label }}{{ form.description }}<br>
+
+
+            {{ form.submit }}<br>
+
+
+        </form>
+        <HR>
+        <table  border="8">
+            <tr>
+                <td>username</td><td>password</td><td>sex</td><td>age</td><td>phone</td><td>description</td><td></td>
+        </tr>
+
+        {% for row in result %}
+            <tr>
+                <td>{{ row.username }}</td>
+                <td>{{ row.password }}</td>
+                <td>{{ row.sex }}</td>
+                <td>{{ row.age }}</td>
+                <td>{{ row.phone }}</td>
+                <td>{{ row.age }}</td>
+                <td>{{ row.description }}</td>
+                <td><a href="{{ url_for('delete_id', id=row.usrname) }}">删除</a></td>
+            </tr>
+        {% endfor %}
+        </table>
+
+    </table>
+</body>
+</html>
