@@ -81,11 +81,10 @@ def testhello2():
     # 1 成功 2 不存在用户名 3 密码错误
     username = request.form['username']
     password = request.form['password']
-    sql = "select username,password from users where username = "+username
+    sql = u"select username,password from users where username = '%s' " % username
 
     cursor.execute(sql)
     result = cursor.fetchall()
-
     if len(result) == 0:
         return "2"
     elif result[0]['password'] != password:
@@ -135,9 +134,10 @@ def register():
     age = request.form.get('age')
     phone = request.form.get('phone')
     description = request.form.get('description')
-
+    image = request.form.get('image')
+    print("sex"+sex)
     sql = "insert into Users VALUES (%s, %s, %s ,%s, %s , %s, %s)"
-    cursor.execute(sql, [username, password, sex, age, phone, description, ""])
+    cursor.execute(sql, [username, password, sex, age, phone, description, image])
     connection.commit()
 
     cursor.close()
@@ -161,7 +161,7 @@ def location(username):
     return str(result)
 
 
-@app.route('/location_me/<string:username>', methods=['get','post'])
+@app.route('/location_me/<string:username>', methods=['get', 'post'])
 def location_for(username):
     connection = pymysql.connect(host='rm-bp151716jpy7k5711zo.mysql.rds.aliyuncs.com', user='root',
                                  password='123456789yY', database='ryxs')
@@ -185,5 +185,5 @@ def updatalocation():
 
 
 if __name__ == '__main__':
-    app.run(host='0.0.0.0')
+    app.run()
 
