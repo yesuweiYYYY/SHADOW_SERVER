@@ -115,7 +115,7 @@ def testhello():
 
 
 # 注册
-@app.route('/register', methods=[ 'post'])
+@app.route('/register', methods=['post'])
 def register():
     # 1 成功 2 用户已存在
     connection = pymysql.connect(host='rm-bp151716jpy7k5711zo.mysql.rds.aliyuncs.com', user='root',
@@ -181,7 +181,37 @@ def updatalocation():
     Bluetoothid = request.form.get('Bluetoothid')
     x = request.form.get('x')
     y = request.form.get('y')
+
+    connection = pymysql.connect(host='rm-bp151716jpy7k5711zo.mysql.rds.aliyuncs.com', user='root',
+                                 password='123456789yY', database='ryxs')
+    cursor = connection.cursor(cursor=pymysql.cursors.DictCursor)
+
+
+    sql = u"update location set x=%s,y=%s where id = '%s'" % (string(x),string(y),Bluetoothid)
+
+    cursor.execute(sql)
+    result = cursor.fetchall()
+
+    cursor.close()
+    connection.close()
+
     return str(Bluetoothid)+str(x)+str(y)
+
+
+@app.route('/info/<string:username>', methods=['get', 'post'])
+def info(username):
+    connection = pymysql.connect(host='rm-bp151716jpy7k5711zo.mysql.rds.aliyuncs.com', user='root',
+                                 password='123456789yY', database='ryxs')
+    cursor = connection.cursor(cursor=pymysql.cursors.DictCursor)
+
+    sql = "select * from users where username= '%s' " % username
+    print(sql)
+    cursor.execute(sql)
+    result = cursor.fetchall()
+
+    cursor.close()
+    connection.close()
+    return str(result)
 
 
 if __name__ == '__main__':
